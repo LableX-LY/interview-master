@@ -1,0 +1,38 @@
+# 公共配置文件
+# @author X_LY。
+server:
+  port:
+    8101
+  servlet:
+    context-path: /api
+spring:
+  # 默认 dev 环境
+  profiles:
+    active: prod
+  application:
+    name: interview-master-backend
+  # Redis 配置
+  redis:
+    database: 1
+    host:
+    port: 6379
+    password:
+  # 数据库配置
+  # todo 需替换配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://xxxx:3306/xxx
+    username:
+    password:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: isDelete # 全局逻辑删除的实体字段名
+      logic-delete-value: 1 # 逻辑已删除值（默认为 1）
+      logic-not-delete-value: 0 # 逻辑未删除值（默认为 0）
