@@ -1,5 +1,6 @@
 package com.xly.interview.master.common;
 
+import lombok.Data;
 import org.apache.poi.ss.formula.functions.T;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.io.Serializable;
  * @createtime 2025/7/3 16:25
  * @description 通用的响应类
  **/
-
+@Data
 public class BaseResponse<T> implements Serializable {
 
     private int code;
