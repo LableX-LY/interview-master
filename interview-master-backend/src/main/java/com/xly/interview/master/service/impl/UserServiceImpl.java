@@ -5,11 +5,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xly.interview.master.common.ErrorCode;
 import com.xly.interview.master.exception.BusinessException;
 import com.xly.interview.master.model.bean.User;
-import com.xly.interview.master.model.vo.LoginUserVO;
+import com.xly.interview.master.model.vo.user.LoginUserVO;
 import com.xly.interview.master.service.UserService;
 import com.xly.interview.master.mapper.UserMapper;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 

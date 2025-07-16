@@ -2,7 +2,7 @@ package com.xly.interview.master.service;
 
 import com.xly.interview.master.model.bean.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xly.interview.master.model.vo.LoginUserVO;
+import com.xly.interview.master.model.vo.user.LoginUserVO;
 
 import javax.servlet.http.HttpServletRequest;
 

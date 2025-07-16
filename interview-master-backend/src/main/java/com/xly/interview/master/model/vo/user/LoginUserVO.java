@@ -1,4 +1,4 @@
-package com.xly.interview.master.model.vo;
+package com.xly.interview.master.model.vo.user;
 
 import com.xly.interview.master.common.ErrorCode;
 import com.xly.interview.master.exception.BusinessException;

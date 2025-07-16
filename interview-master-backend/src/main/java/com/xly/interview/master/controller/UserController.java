@@ -9,15 +9,14 @@ import com.xly.interview.master.exception.BusinessException;
 import com.xly.interview.master.model.dto.UserDeleteRequest;
 import com.xly.interview.master.model.dto.UserLoginRequest;
 import com.xly.interview.master.model.dto.UserRegisterRequest;
-import com.xly.interview.master.model.enums.UserRoleEnum;
-import com.xly.interview.master.model.vo.LoginUserVO;
+import com.xly.interview.master.model.vo.user.LoginUserVO;
 import com.xly.interview.master.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.management.BadAttributeValueExpException;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -34,6 +33,7 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    @ApiOperation("用户注册")
     @PostMapping("/register")
     public BaseResponse<Long> register(@RequestBody UserRegisterRequest userRegisterRequest) {
         if (userRegisterRequest == null) {
@@ -52,6 +52,7 @@ public class UserController {
         return ResultUtil.success(resutl);
     }
 
+    @ApiOperation("用户登录")
     @PostMapping("/login")
     public BaseResponse<LoginUserVO> login(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
         if (userLoginRequest == null) {
@@ -66,6 +67,7 @@ public class UserController {
         return ResultUtil.success(loginUserVO);
     }
 
+    @ApiOperation("删除用户信息，管理员可用")
     @PostMapping("/delete")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> deleteUser(@RequestBody UserDeleteRequest userDeleteRequest) {
@@ -80,6 +82,7 @@ public class UserController {
         return ResultUtil.success(result);
     }
 
+    @ApiOperation("用户退出登录")
     @PostMapping("/logout")
     public BaseResponse<Boolean> logout(HttpServletRequest request) {
         if (request == null) {

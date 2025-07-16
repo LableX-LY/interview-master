@@ -1,4 +1,4 @@
-package com.xly.interview.master.model.vo;
+package com.xly.interview.master.model.vo.user;
 
 /**
  * @author X-LY。
