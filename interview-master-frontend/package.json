@@ -9,16 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/nextjs-registry": "^1.0.2",
+    "@ant-design/pro-components": "^2.8.10",
+    "@ant-design/pro-form": "^2.32.0",
+    "@reduxjs/toolkit": "^2.8.2",
+    "antd": "^5.26.6",
+    "axios": "^1.10.0",
+    "next": "14.2.6",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.6"
+    "react-redux": "^9.2.0"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
-    "eslint-config-next": "14.2.6"
+    "eslint-config-next": "14.2.6",
+    "typescript": "^5"
   }
 }
