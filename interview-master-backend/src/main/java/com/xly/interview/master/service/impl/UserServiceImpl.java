@@ -3,17 +3,26 @@ package com.xly.interview.master.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xly.interview.master.common.ErrorCode;
+import com.xly.interview.master.config.RedissonConfig;
+import com.xly.interview.master.constant.RedisConstant;
 import com.xly.interview.master.exception.BusinessException;
 import com.xly.interview.master.model.bean.User;
 import com.xly.interview.master.model.vo.user.LoginUserVO;
 import com.xly.interview.master.service.UserService;
 import com.xly.interview.master.mapper.UserMapper;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.Redisson;
+import org.redisson.api.RBitSet;
+import org.redisson.api.RedissonClient;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.time.Year;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +39,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private RedissonClient redissonClient;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * 盐值，混淆密码
@@ -176,6 +191,46 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         return currentUser;
     }
+
+    @Override
+    public Boolean addUserSignIn(long userId) {
+        // 构建Redis Key
+        LocalDate date = LocalDate.now();
+        String userSignInRedisKey = RedisConstant.getUserSignInRedisKey(date.getYear(), userId);
+        RBitSet bitSet = redissonClient.getBitSet(userSignInRedisKey);
+        // 获取当前是今年的第几天（从1开始算起）
+        int dayOfYear = date.getDayOfYear();
+        // 检查当天是否已经签到
+        if (!bitSet.get(dayOfYear)) {
+            // 当天还未签到，进行签到
+            // todo Redis失败的数据控制
+            return bitSet.set(dayOfYear, true);
+        }
+        return true;
+    }
+
+    @Override
+    public List<Integer> getUserSignInRecord(Long userId, Integer year) {
+        if (year == null) {
+            LocalDate date = LocalDate.now();
+            year = date.getYear();
+        }
+        String key = RedisConstant.getUserSignInRedisKey(year, userId);
+        RBitSet signInBitSet = redissonClient.getBitSet(key);
+        // 加载 BitSet 到内存中，避免后续读取时发送多次请求
+        BitSet bitSet = signInBitSet.asBitSet();
+        // 统计签到的日期
+        List<Integer> dayList = new ArrayList<>();
+        // 从索引 0 开始查找下一个被设置为 1 的位
+        int index = bitSet.nextSetBit(0);
+        while (index >= 0) {
+            dayList.add(index);
+            // 查找下一个被设置为 1 的位
+            index = bitSet.nextSetBit(index + 1);
+        }
+        return dayList;
+    }
+
 }
 
 

@@ -29,4 +29,6 @@ public interface QuestionService extends IService<Question> {
 
     QuestionVO getQuestionVO(Question question, HttpServletRequest request);
 
+    Page<Question> searchFromEs(QuestionQueryRequest questionQueryRequest);
+
 }

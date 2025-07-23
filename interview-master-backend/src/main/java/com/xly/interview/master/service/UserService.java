@@ -5,6 +5,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xly.interview.master.model.vo.user.LoginUserVO;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author x-ly
@@ -20,5 +23,9 @@ public interface UserService extends IService<User> {
     User getloginUser(HttpServletRequest request);
 
     Boolean deleteUser(Long id);
+
+    Boolean addUserSignIn(long userId);
+
+    List<Integer> getUserSignInRecord(Long userId, Integer year);
 
 }

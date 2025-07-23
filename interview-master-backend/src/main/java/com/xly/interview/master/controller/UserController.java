@@ -6,18 +6,23 @@ import com.xly.interview.master.common.ErrorCode;
 import com.xly.interview.master.common.ResultUtil;
 import com.xly.interview.master.constant.UserConstant;
 import com.xly.interview.master.exception.BusinessException;
+import com.xly.interview.master.model.bean.User;
 import com.xly.interview.master.model.dto.UserDeleteRequest;
 import com.xly.interview.master.model.dto.UserLoginRequest;
 import com.xly.interview.master.model.dto.UserRegisterRequest;
 import com.xly.interview.master.model.vo.user.LoginUserVO;
 import com.xly.interview.master.service.UserService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author X-LY。
@@ -94,6 +99,28 @@ public class UserController {
         //清空Session
         request.getSession().removeAttribute(UserConstant.USER_LOGIN_STATE);
         return ResultUtil.success(true);
+    }
+
+    @ApiOperation("用户签到")
+    @PostMapping("/add/sign_in")
+    public BaseResponse<Boolean> userSignIn(HttpServletRequest request) {
+        User user = userService.getloginUser(request);
+        if (user == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR,"用户未登录!");
+        }
+        return ResultUtil.success(userService.addUserSignIn(user.getId()));
+    }
+
+    @ApiOperation("查看用户签到记录")
+    @GetMapping("/get/sign_in")
+    public BaseResponse<List<Integer>> getUserSignIn(Integer year, HttpServletRequest request) {
+        User user = userService.getloginUser(request);
+        if (user == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR,"请先登录!");
+        }
+        // Map<LocalDate, Boolean> userSignInRecord = userService.getUserSignInRecord(user.getId(), year);
+        List<Integer> userSignInRecord = userService.getUserSignInRecord(user.getId(), year);
+        return ResultUtil.success(userSignInRecord);
     }
 
 }

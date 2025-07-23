@@ -161,6 +161,17 @@ public class QuestionController {
         return ResultUtil.success(true);
     }
 
+    @PostMapping("/search/es/page/vo")
+    public BaseResponse<Page<QuestionVO>> searchQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
+                                                                 HttpServletRequest request) {
+        long size = questionQueryRequest.getPageSize();
+        // 限制爬虫
+        if (size > 200) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Page<Question> questionPage = questionService.searchFromEs(questionQueryRequest);
+        return ResultUtil.success(questionService.getQuestionVOPage(questionPage, request));
+    }
 
 
 }
